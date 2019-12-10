@@ -19,6 +19,15 @@ android {
     }
 }
 
+ext {
+    firebaseVersion = '19.1.0'
+    playServicesVersion = '17.0.0'
+    supportDesignVersion = '27.1.1'
+    butterknifeVersion = '10.2.0'
+    materialDesignVersion = '1.1.0-alpha06'
+    firebaseFirestoreVersion = '21.2.1'
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.2'
@@ -26,4 +35,18 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // android support design
+    implementation "com.android.support:design:$supportDesignVersion"
+    // android material design
+    api "com.google.android.material:material:$materialDesignVersion"
+
+    // Firebase
+    implementation "com.google.firebase:firebase-auth:$firebaseVersion"
+    implementation "com.google.android.gms:play-services-auth:$playServicesVersion"
+    implementation "com.google.firebase:firebase-firestore:$firebaseFirestoreVersion"
 }
+
+// google play services
+apply plugin: 'com.google.gms.google-services'
+

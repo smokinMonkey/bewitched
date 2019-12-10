@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "404164332190",
+    "firebase_url": "https://bewitched-app.firebaseio.com",
+    "project_id": "bewitched-app",
+    "storage_bucket": "bewitched-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404164332190:android:8e15f871a0a91c0806498f",
+        "android_client_info": {
+          "package_name": "com.smokinmonkey.bewitched"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404164332190-7d87kqq402b7sbt9eouirifb9tbg4io5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjXUCMBHf2ZlCY2vQ2AYHhNZTdN1RFtuk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404164332190-7d87kqq402b7sbt9eouirifb9tbg4io5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
