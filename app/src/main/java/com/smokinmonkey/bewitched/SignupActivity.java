@@ -14,11 +14,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.smokinmonkey.bewitched.classes.User;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -35,13 +44,16 @@ public class SignupActivity extends AppCompatActivity {
     // firebase objects
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
-    private FirebaseFirestore mFirebaseFirestore;
+    private FirebaseDatabase mFirebaseDb;
+    private DatabaseReference mDbRef;
 
     // string for edit text
     private String mName;
     private String mEmail;
     private String mPassword;
     private String mConfirmPassword;
+
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +69,12 @@ public class SignupActivity extends AppCompatActivity {
         tvAlreadyAccount = (TextView) findViewById(R.id.tvAlreadyAccountSignup);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseFirestore = FirebaseFirestore.getInstance();
+        mFirebaseDb = FirebaseDatabase.getInstance();
+        mDbRef = mFirebaseDb.getReference();
+
+        mFirebaseUser = null;
+        mUser = new User();
+
 
         // add on click listeners for buttons
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -66,14 +83,12 @@ public class SignupActivity extends AppCompatActivity {
                 register();
             }
         });
-
         tvAlreadyAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alreadyAccount();
             }
         });
-
     }
 
     // method for checking and validating input text and register
@@ -82,7 +97,6 @@ public class SignupActivity extends AppCompatActivity {
         mEmail = etEmail.getText().toString().trim();
         mPassword = etPassword.getText().toString().trim();
         mConfirmPassword = etConfirmPassword.getText().toString().trim();
-//        String strBirthday = etBirthday.getText().toString().trim();
 
         // create and show loading bar to let user know it is running
 
@@ -96,15 +110,23 @@ public class SignupActivity extends AppCompatActivity {
         btnRegister.setEnabled(false);
 
         // firebase sign up new users with email and password
-        mFirebaseAuth.createUserWithEmailAndPassword(mEmail, mPassword).addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+        mFirebaseAuth.createUserWithEmailAndPassword(mEmail, mPassword).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    Log.d(TAG, "Firebase create user with email and password: SUCCESSFUL!!!");
+            public void onSuccess(AuthResult authResult) {
+                if(authResult.getUser().getUid() != null) {
                     mFirebaseUser = mFirebaseAuth.getInstance().getCurrentUser();
+
+                    mUser.setUserName(mName);
+                    mUser.setUserEmail(mEmail);
+                    mUser.setUserPassword(mPassword);
+                    mUser.setUserID(mFirebaseUser.getUid());
+
+                    // save to db
+                    DatabaseReference usersDbRef = mFirebaseDb.getReference().child("users");
+                    usersDbRef.child(mUser.getUserID()).setValue(mUser);
+
                 } else {
-                    Log.d(TAG, "Firebase create user with email and password: FAILED!!!", task.getException());
-                    Toast.makeText(SignupActivity.this, "Sign up FAILED!", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Create user with email and password fail!!! firebase user is null...");
                 }
             }
         });
@@ -112,6 +134,7 @@ public class SignupActivity extends AppCompatActivity {
         btnRegister.setEnabled(true);
         setResult(RESULT_OK, null);
 
+        finish();
     }
 
     // method to validate all edit text fields

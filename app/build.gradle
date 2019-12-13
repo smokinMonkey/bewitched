@@ -43,8 +43,10 @@ dependencies {
 
     // Firebase
     implementation "com.google.firebase:firebase-auth:$firebaseVersion"
+    implementation "com.google.firebase:firebase-database:$firebaseVersion"
     implementation "com.google.android.gms:play-services-auth:$playServicesVersion"
     implementation "com.google.firebase:firebase-firestore:$firebaseFirestoreVersion"
+
 }
 
 // google play services
