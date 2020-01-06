@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             // start user into home activity
-                            Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                            Intent i = new Intent(getApplicationContext(), DailyActivity.class);
                             startActivity(i);
 
                         } else {
